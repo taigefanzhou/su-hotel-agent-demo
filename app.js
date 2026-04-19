@@ -3,7 +3,7 @@
 // ============================================================
 const AGENTS = [
   { id:'AGT-001', name:'前台小星', emoji:'🏪', type:'receptionist', typeName:'前台接待', status:'online', desc:'智能前台接待Agent，支持多语言对话、入住办理、退房结账', model:'GPT-4o Fine-tuned', owner:'张经理', created:'2024-01-15', uptime:'365天', tags:['多语言','入住办理','退房结账','发票开具'], skills:['身份核验','入住办理','退房结账','房卡发放','发票开具','夜间值守'], metrics:{conv:1247,resolve:'96.5%',rating:4.9}, perf:{speed:88,accuracy:96.5,satisfaction:96,resolve:92.3}, radar:[95,88,92,85,90,78] },
-  { id:'AGT-002', name:'礼宾大卫', emoji:'🎩', type:'concierge', typeName:'礼宾服务', status:'online', desc:'高端礼宾服务Agent，提供行程规划、餐厅预订、专车安排等VIP服务', model:'Claude 3 Opus', owner:'李主管', created:'2024-02-20', uptime:'330天', tags:['行程规划','餐厅预订','专车安排','VIP服务'], skills:['行程定制','餐厅预订','专车调度','景点推荐','机场接送','私人管家'], metrics:{conv:856,resolve:'94.2%',rating:4.8}, perf:{speed:92,accuracy:94.2,satisfaction:94,resolve:89.5}, radar:[88,92,95,90,85,82] },
+  { id:'AGT-002', name:'画像小慧', emoji:'🧠', type:'concierge', typeName:'宾客画像', status:'online', desc:'宾客画像Agent，客人画像构建、偏好记忆、历史行为分析、个性化推荐', model:'Claude 3 Opus', owner:'李主管', created:'2024-02-20', uptime:'330天', tags:['画像构建','偏好记忆','行为分析','个性推荐'], skills:['画像构建','偏好记忆','行为分析','个性推荐','历史追踪','标签管理'], metrics:{conv:856,resolve:'94.2%',rating:4.8}, perf:{speed:92,accuracy:94.2,satisfaction:94,resolve:89.5}, radar:[88,92,95,90,85,82] },
   { id:'AGT-003', name:'客房小美', emoji:'🛏️', type:'roomservice', typeName:'客房服务', status:'busy', desc:'客房服务Agent，负责客房清洁调度、minibar补充、维修报修', model:'GPT-4o', owner:'王主管', created:'2024-03-10', uptime:'310天', tags:['清洁调度','minibar','维修报修','布草管理'], skills:['清洁排班','物品补充','维修派单','布草管理','能耗管理','质量检查'], metrics:{conv:2103,resolve:'91.8%',rating:4.7}, perf:{speed:85,accuracy:91.8,satisfaction:90,resolve:88.2}, radar:[82,85,90,95,88,75] },
   { id:'AGT-004', name:'餐饮小厨', emoji:'🍽️', type:'restaurant', typeName:'餐饮服务', status:'online', desc:'餐饮服务Agent，管理餐厅预订、菜品推荐、送餐服务', model:'Gemini Pro', owner:'陈经理', created:'2024-04-05', uptime:'280天', tags:['餐厅预订','菜品推荐','送餐服务','过敏提醒'], skills:['餐位管理','菜单推荐','送餐调度','库存预警','过敏管理','营养分析'], metrics:{conv:967,resolve:'93.1%',rating:4.8}, perf:{speed:90,accuracy:93.1,satisfaction:92,resolve:90.1}, radar:[90,86,88,82,95,80] },
   { id:'AGT-005', name:'维修老赵', emoji:'🔧', type:'maintenance', typeName:'设施维护', status:'online', desc:'设施维护Agent，智能故障诊断、维修派单、预防性维护', model:'GPT-4o', owner:'赵工', created:'2024-05-15', uptime:'250天', tags:['故障诊断','维修派单','预防维护','能耗监控'], skills:['故障诊断','工单管理','备件管理','预防维护','能耗优化','供应商对接'], metrics:{conv:534,resolve:'97.2%',rating:4.9}, perf:{speed:78,accuracy:97.2,satisfaction:95,resolve:95.6}, radar:[75,95,85,88,80,92] },
@@ -21,10 +21,10 @@ const CONVERSATIONS = [
     {role:'agent',text:'好的王先生！让我为您查看明天的海景房空房情况...\n\n📋 查询结果：\n• 豪华海景大床房 - ¥1,280/晚 ✅ 有房\n• 海景双床房 - ¥1,180/晚 ✅ 有房\n• 海景套房 - ¥2,680/晚 ✅ 有房\n\n作为金卡会员，您可享受9折优惠。推荐您选择豪华海景大床房，高楼层视野极佳！',time:'14:31'},
     {role:'guest',text:'请问还有海景房吗？',time:'14:32'}
   ]},
-  { id:'C002', guest:'李女士', guestEmoji:'👩', agentId:'AGT-002', preview:'需要预订明天的米其林餐厅', time:'14:15', unread:0, messages:[
-    {role:'agent',text:'李女士您好，我是礼宾大卫。有什么可以为您效劳的？',time:'14:10'},
-    {role:'guest',text:'需要预订明天的米其林餐厅',time:'14:15'},
-    {role:'agent',text:'好的！我为您推荐以下附近的米其林餐厅：\n\n⭐ 一星：「雅苑」中餐厅 - 步行5分钟\n⭐⭐ 二星：「Le Jardin」法餐 - 车程10分钟\n⭐⭐⭐ 三星：「鼎泰丰」 - 车程15分钟\n\n需要我为您预订哪一家？我也可以安排酒店专车接送。',time:'14:16'}
+  { id:'C002', guest:'李女士', guestEmoji:'👩', agentId:'AGT-002', preview:'帮我看看上次住的房型偏好', time:'14:15', unread:0, messages:[
+    {role:'agent',text:'李女士您好，我是画像小慧。让我为您调取历史偏好档案。',time:'14:10'},
+    {role:'guest',text:'帮我看看上次住的房型偏好',time:'14:15'},
+    {role:'agent',text:'好的！根据您的历史入住记录：\n\n📋 偏好档案：\n• 房型偏好：高楼层海景大床房\n• 枕头：荞麦枕\n• 迷你吧：常备依云矿泉水\n• 温度：22°C\n\n已同步至客房管家，本次入住将自动配置。需要调整吗？',time:'14:16'}
   ]},
   { id:'C003', guest:'张先生', guestEmoji:'🧔', agentId:'AGT-003', preview:'房间空调好像不太凉快', time:'13:48', unread:1, messages:[
     {role:'guest',text:'房间空调好像不太凉快',time:'13:48'},
@@ -44,10 +44,10 @@ const WORKFLOWS = [
     edges:[{from:'n1',to:'n2'},{from:'n2',to:'n3'},{from:'n3',to:'n4'},{from:'n3',to:'n5'}],
     steps:[
       {name:'身份核验',agent:'前台小星',status:'done',time:'2分钟'},
-      {name:'偏好匹配',agent:'礼宾大卫',status:'done',time:'1分钟'},
+      {name:'偏好匹配',agent:'画像小慧',status:'done',time:'1分钟'},
       {name:'房间分配',agent:'客房小美',status:'running',time:'进行中...'},
       {name:'欢迎礼遇',agent:'餐饮小厨',status:'pending',time:'等待中'},
-      {name:'管家对接',agent:'礼宾大卫',status:'pending',time:'等待中'}
+      {name:'管家对接',agent:'画像小慧',status:'pending',time:'等待中'}
     ]
   },
   { name:'投诉处理流程', icon:'⚡',
@@ -62,7 +62,7 @@ const WORKFLOWS = [
       {name:'投诉受理',agent:'前台小星',status:'done',time:'30秒'},
       {name:'情感分析',agent:'质检精灵',status:'done',time:'5秒'},
       {name:'问题诊断',agent:'维修老赵',status:'running',time:'进行中...'},
-      {name:'解决方案',agent:'礼宾大卫',status:'pending',time:'等待中'}
+      {name:'解决方案',agent:'在线客服',status:'pending',time:'等待中'}
     ]
   },
   { name:'每日运营报告', icon:'📊',
@@ -81,8 +81,8 @@ const WORKFLOWS = [
 ];
 
 const ACTIVE_WFS = [
-  {name:'VIP入住 - 王先生',agents:'小星→大卫→小美',progress:60,color:'var(--c1)',status:'running'},
-  {name:'投诉处理 - 812房',agents:'小星→老赵→大卫',progress:45,color:'var(--c5)',status:'running'},
+  {name:'VIP入住 - 王先生',agents:'小星→小慧→小美',progress:60,color:'var(--c1)',status:'running'},
+  {name:'投诉处理 - 812房',agents:'小星→老赵→小慧',progress:45,color:'var(--c5)',status:'running'},
   {name:'早餐备料',agents:'小厨→系统',progress:100,color:'var(--c3)',status:'done'},
   {name:'夜间巡检',agents:'安保卫士',progress:80,color:'var(--c4)',status:'running'}
 ];
@@ -437,7 +437,7 @@ function renderDashboard() {
   ]);
   // Pie chart
   drawDoughnut('pieChart', [
-    {label:'前台接待',value:5},{label:'礼宾服务',value:3},{label:'客房服务',value:4},{label:'餐饮服务',value:3},{label:'设施维护',value:3},{label:'营销推广',value:3}
+    {label:'前台接待',value:5},{label:'宾客画像',value:3},{label:'客房服务',value:4},{label:'餐饮服务',value:3},{label:'设施维护',value:3},{label:'营销推广',value:3}
   ], ['rgba(99,102,241,0.8)','rgba(6,182,212,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)','rgba(239,68,68,0.8)','rgba(139,92,246,0.8)']);
   // Agent live grid
   renderAgentLiveGrid('all');
