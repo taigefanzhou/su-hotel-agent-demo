@@ -186,7 +186,7 @@ const CHAT={
 'gm':{abilities:['📊 经营看板','⚠️ 异常预警','🔮 预测分析','🎯 连锁对标','📑 日报生成','👥 团队监督'],quickCmds:['昨日营收','异常事项','员工KPI','门店对比'],context:[{l:'昨日营收',v:'¥128,456',c:'var(--color-primary)'},{l:'同比',v:'+8.2%',c:'var(--color-green)'},{l:'关注项',v:'2项',c:'var(--color-warm)'},{l:'KPI达成',v:'102.3%',c:'var(--color-yellow)'}],msgs:[{type:'agent',text:'您好，我是数字店长Agent，可汇总全域经营数据。',time:'13:30'},{type:'user',text:'昨日经营日报',time:'13:31'},{type:'agent',text:'📊 **昨日经营日报（双店）**\n• 营收：¥128,456（+8.2%）\n• OCC：82.5%\n• RevPAR：¥486\n• 超预算：+2.3%\n\n⚠️ 关注：下浩里店能耗+18%，已派工程排查。',time:'13:31'},{type:'user',text:'两店表现对比',time:'13:32'},{type:'agent',text:'**南滨路店 vs 下浩里店**\n南滨路：营收¥72,856 / OCC 85% / 满意度96.5\n下浩里：营收¥55,600 / OCC 80% / 满意度95.8\n\n南滨路店表现更稳，下浩里需关注能耗异常。',time:'13:32'}]},
 'mkt':{abilities:['👥 会员触达','🎨 活动生成','📱 渠道同步','📈 效果追踪','🎁 优惠券发放','✉️ 自动营销'],quickCmds:['今日生日会员','活动效果','沉睡唤醒','应急营销'],context:[{l:'今日触达',v:'342人',c:'var(--color-primary)'},{l:'转化率',v:'28.6%',c:'var(--color-green)'},{l:'活跃活动',v:'4个',c:'var(--color-warm)'},{l:'营销ROI',v:'1:6.8',c:'var(--color-yellow)'}],msgs:[{type:'agent',text:'您好，数字营销专员Agent为您服务，可自动化触达会员。',time:'13:20'},{type:'user',text:'今日生日会员',time:'13:21'},{type:'agent',text:'🎂 **今日生日会员 23位**\n• VIP 3位（房内惊喜）\n• 活跃 8位（8折券）\n• 沉睡 12位（唤醒券）\n\n预算¥2,000内，客房管家已布置VIP张总房间。',time:'13:21'},{type:'user',text:'雨夜应急活动效果',time:'13:22'},{type:'agent',text:'☔ **"雨夜安心住"活动**\n• 曝光：18.6k\n• 咨询：248（转化率13%）\n• 成交：17间（超预期+2）\n• 新增营收：¥10,013\n\n活动ROI 1:8.3，超预算目标。',time:'13:22'}]},
 'finance':{abilities:['📊 账务稽核','💰 成本预警','📑 应收管控','⚖️ 合规审计','🔒 风险监控','📋 发票管理'],quickCmds:['今日对账','成本异常','应收账款','合规检查'],context:[{l:'今日到账',v:'¥86,450',c:'var(--color-primary)'},{l:'应收',v:'¥32,850',c:'var(--color-warm)'},{l:'成本异常',v:'1项',c:'var(--color-yellow)'},{l:'合规评分',v:'99.5',c:'var(--color-green)'}],msgs:[{type:'agent',text:'您好，我是财务风控Agent，实时守护账务安全。',time:'13:10'},{type:'user',text:'今日对账情况',time:'13:11'},{type:'agent',text:'💰 **今日对账**\n• 携程T+1：¥45,230（38笔 / 1笔差异¥15）\n• 美团：¥28,420（对账一致）\n• 飞猪：¥12,800（对账一致）\n\n差异¥15已标记，低于容忍0.03%。',time:'13:11'},{type:'user',text:'成本异常',time:'13:12'},{type:'agent',text:'⚠️ **下浩里店能耗异常**\n• 本月空调能耗¥27,600（+18%）\n• 入住率仅+3%、气温+1°C，无法解释\n• 疑似冷媒泄漏或控制阀故障\n\n已冻结预算调整，工程Agent排查中。',time:'13:12'}]},
-'supply':{abilities:['🔍 采购寻源','📦 库存预测','⭐ 供应商评估','🔄 智能补货','📝 合同管理','💸 价格谈判'],quickCmds:['库存预警','本月采购','供应商评分','补货建议'],context:[{l:'活跃供应商',v:'12家',c:'var(--color-primary)'},{l:'库存预警',v:'3项',c:'var(--color-warm)'},{l:'本月采购',v:'¥46,820',c:'var(--color-green)'},{l:'平均评分',v:'4.6',c:'var(--color-yellow)'}],msgs:[{type:'agent',text:'您好，供应链管控Agent，可为您管理采购和库存。',time:'13:00'},{type:'user',text:'库存预警',time:'13:01'},{type:'agent',text:'⚠️ **库存预警 3项**\n1. 洗漱套装：380套（剩5.6天）\n2. 矿泉水：186箱（剩4天）\n3. 床单布草：92套（剩7天）\n\n建议本周补货，已生成采购单#PO-2301。',time:'13:01'},{type:'user',text:'供应商评估',time:'13:02'},{type:'agent',text:'⭐ **12家供应商排名**\nA洗涤厂 4.8（+0.2，推荐主供）\nB备品 4.6（稳定）\nC生鲜 4.2（↓，近期2次延迟）\n\n建议C家降级为备选，启用D家主供。',time:'13:02'}]},
+'supply':{abilities:['🔍 采购寻源','📦 库存预测','⭐ 供应商评估','🔄 智能补货','📝 合同管理','💸 价格谈判'],quickCmds:['库存预警','本月采购','供应商评分','补货建议'],context:[{l:'活跃供应商',v:'12家',c:'var(--color-primary)'},{l:'库存预警',v:'3项',c:'var(--color-warm)'},{l:'本月采购',v:'¥46,820',c:'var(--color-green)'},{l:'平均评分',v:'4.6',c:'var(--color-yellow)'}],msgs:[{type:'agent',text:'您好，供应链管控Agent，可为您管理采购和库存。',time:'13:00'},{type:'user',text:'库存预警',time:'13:01'},{type:'agent',text:'⚠️ **库存预警 3项**\n1. 洗漱套装：380套（剩5.6天）\n2. 矿泉水：186箱（剩4天）\n3. 袋装面包：38包（剩1.5天）\n\n建议本周补货，已生成采购单#PO-2301。',time:'13:01'},{type:'user',text:'供应商评估',time:'13:02'},{type:'agent',text:'⭐ **12家供应商排名**\nA洗涤厂 4.8（+0.2，推荐主供）\nB备品 4.6（稳定）\nC袋装食品 4.2（↓，2次延迟+1次临期）\n\n建议C家降级为备选，启用D家主供。',time:'13:02'}]},
 'quality':{abilities:['👀 服务巡检','📚 员工培训','🔧 质量整改','⭐ SOP监督','📝 评价分析','🎯 改进追踪'],quickCmds:['今日巡检','员工培训','SOP执行率','整改进度'],context:[{l:'今日巡检',v:'8次',c:'var(--color-primary)'},{l:'问题项',v:'5项',c:'var(--color-warm)'},{l:'SOP执行率',v:'96.4%',c:'var(--color-green)'},{l:'整改完成',v:'12/15',c:'var(--color-yellow)'}],msgs:[{type:'agent',text:'您好，数字质检Agent，守护苏适服务品质。',time:'12:50'},{type:'user',text:'今日大堂巡检',time:'12:51'},{type:'agent',text:'📋 **14:00 大堂巡检报告**\n• 评分：92/100\n• 前台对话5笔：4笔合规\n• 问题：#C-1245缺少问候语\n• 环境：绿植需浇水、音乐偏大\n\n改进项已推送前台和保洁。',time:'12:51'},{type:'user',text:'新员工培训',time:'12:52'},{type:'agent',text:'👩‍🎓 **新员工小刘（第3天）**\n• 理论完成：80%\n• 实操完成：40%\n• 昨日考核：78分（未达标）\n• 薄弱：房卡操作、会员识别\n\n已推送针对性练习+老带新对练。',time:'12:52'}]},
 'eng':{abilities:['🔧 设备监控','🔔 故障预警','📊 能耗分析','⚡ 自动派单','🏭 IoT接入','📑 维修档案'],quickCmds:['告警列表','今日工单','能耗分析','设备健康'],context:[{l:'设备总数',v:'486台',c:'var(--color-primary)'},{l:'在线率',v:'98.7%',c:'var(--color-green)'},{l:'告警',v:'3项',c:'var(--color-red)'},{l:'今日工单',v:'14个',c:'var(--color-warm)'}],msgs:[{type:'agent',text:'您好，工程运维Agent，24h监控2店所有设备。',time:'12:40'},{type:'user',text:'当前告警',time:'12:41'},{type:'agent',text:'⚠️ **3项告警**\n1. 南滨路店0612房空调28°C（维修中）\n2. 下浩里店3F中央空调控制阀故障\n3. 下浩里店电梯B季度保养到期\n\n已派单给3位技工处理。',time:'12:41'},{type:'user',text:'能耗异常原因',time:'12:42'},{type:'agent',text:'🔍 **下浩里店能耗+18%定位**\n• 3F-5F夜间空调高频运行\n• 根因：3F中央空调控制阀故障\n• 无法按房态调节，空房也制冷\n\n已创建#MT-2901更换控制阀 + 全店排查计划。',time:'12:42'}]}
 };
@@ -261,7 +261,7 @@ const CMD_CHAINS=[
 {t:'trigger',from:'ota',to:'quality',txt:'💬 美团差评 NLP情感分析',ic:'📱→✅'},
 {t:'sync',from:'quality',to:'supply',txt:'近30天12条相似评价 列整改',ic:'✅→📦'},
 {t:'execute',from:'quality',to:'ota',txt:'AI生成个性化真诚致歉回复',ic:'✅→📱'},
-{t:'execute',from:'supply',to:'POS',txt:'增加果汁类+面包品类计划',ic:'📦→🍳'},
+{t:'execute',from:'supply',to:'POS',txt:'扩充袋装面包品种+增加酸奶备选',ic:'📦→🥖'},
 {t:'notify',from:'quality',to:'gm',txt:'48h后安排电话回访',ic:'✅→👔'},
 {t:'record',from:'gm',to:'报表',txt:'差评整改 纳入周质量报告',ic:'👔→📊'}
 ]},
@@ -309,12 +309,12 @@ const CMD_CHAINS=[
 {t:'sync',from:'supply',to:'POS',txt:'预测明日120份(+15%)',ic:'📦→🍳'},
 {t:'execute',from:'supply',to:'finance',txt:'采购订单¥860 提交审批',ic:'📦→🛡'},
 {t:'notify',from:'finance',to:'supply',txt:'审批通过 通知B家配送',ic:'🛡→📦'},
-{t:'record',from:'supply',to:'housekeeper',txt:'厨房排班+1早班',ic:'📦→🏠'}
+{t:'record',from:'supply',to:'housekeeper',txt:'早餐台摆台排班+1早班',ic:'📦→🏠'}
 ]},
 {scene:'⭐ 月度供应商评估',steps:[
 {t:'trigger',from:'supply',to:'finance',txt:'⏰ 读取12家供应商30天记录',ic:'📦→🛡'},
-{t:'notify',from:'supply',to:'gm',txt:'C家生鲜 2次延迟+1次不合格',ic:'📦→👔'},
-{t:'execute',from:'supply',to:'POS',txt:'D家升级为生鲜主供',ic:'📦→🍳'},
+{t:'notify',from:'supply',to:'gm',txt:'C家袋装食品 2次延迟+1次临期',ic:'📦→👔'},
+{t:'execute',from:'supply',to:'POS',txt:'D家升级为袋装早餐主供',ic:'📦→🥖'},
 {t:'execute',from:'finance',to:'supply',txt:'签约调整 付款条件同步',ic:'🛡→📦'},
 {t:'record',from:'quality',to:'报表',txt:'供应链风险报告生成',ic:'✅→📊'}
 ]},
@@ -394,12 +394,13 @@ const CMD_CHAINS=[
 {t:'execute',from:'housekeeper',to:'supply',txt:'发放干净床单120套/毛巾180条上楼备用',ic:'🏠→📦'},
 {t:'record',from:'supply',to:'gm',txt:'布草损耗率0.8% 低于行业',ic:'📦→👔'}
 ]},
-{scene:'🥬 生鲜食材冷链日配',steps:[
-{t:'trigger',from:'POS',to:'supply',txt:'⏰ 07:00 D家生鲜车到达 23单温控合格',ic:'🚚→📦'},
-{t:'execute',from:'supply',to:'POS',txt:'按早午晚餐需求分拣入冻库',ic:'📦→🍳'},
-{t:'sync',from:'supply',to:'finance',txt:'本次到货¥3,280 T+3结算',ic:'📦→🛡'},
-{t:'notify',from:'quality',to:'supply',txt:'抽检牛排批次温度合格记录',ic:'✅→📦'},
-{t:'record',from:'supply',to:'报表',txt:'冷链台账 本月损耗率1.2%',ic:'📦→📊'}
+{scene:'🥯 袋装早餐日常补货',steps:[
+{t:'trigger',from:'POS',to:'supply',txt:'⏰ 06:30 早餐台盘点 袋装面包剩38包/袋装鸡蛋剩24袋',ic:'🥖→📦'},
+{t:'sync',from:'supply',to:'POS',txt:'昨日消耗面包52包/鸡蛋34袋 周末+15%',ic:'📦→🍳'},
+{t:'notify',from:'supply',to:'gm',txt:'面包余量1.5天 鸡蛋余量1天 今日下单',ic:'📦→👔'},
+{t:'execute',from:'supply',to:'finance',txt:'采购单 面包150包+鸡蛋100袋+酸奶80盒 ¥1,280',ic:'📦→🛡'},
+{t:'execute',from:'finance',to:'supply',txt:'B家供应商 次日早上到货',ic:'🛡→📦'},
+{t:'record',from:'supply',to:'报表',txt:'袋装早餐周消耗台账+1条',ic:'📦→📊'}
 ]},
 {scene:'🧻 客房易耗品末位巡检',steps:[
 {t:'trigger',from:'housekeeper',to:'supply',txt:'⏰ 23:30 每层楼布草间自动盘点',ic:'🧹→📦'},
@@ -414,7 +415,7 @@ var CMD_AMBIENT=[
 {t:'info',from:'IoT',to:'housekeeper',txt:'1606语音"关灯睡觉"',ic:'🗣→🏠'},
 {t:'info',from:'IoT',to:'housekeeper',txt:'2015语音"窗帘打开"',ic:'🗣→🏠'},
 {t:'flow',from:'ota',to:'revenue',txt:'美团新订单 x1 大床房',ic:'📱→💹'},
-{t:'info',from:'POS',to:'finance',txt:'餐厅午餐流水 ¥5,680',ic:'🍳→🛡'},
+{t:'info',from:'POS',to:'finance',txt:'minibar消费+早餐结账 ¥2,680',ic:'🥖→🛡'},
 {t:'ok',from:'housekeeper',to:'front-desk',txt:'0612清洁完成 转售状态',ic:'🧹→🏪'},
 {t:'flow',from:'IoT',to:'housekeeper',txt:'3F新风滤芯寿命剩15%',ic:'🍃→🏠'},
 {t:'info',from:'online-cs',to:'front-desk',txt:'微信咨询：停车多少钱',ic:'💬→🏪'},
@@ -579,8 +580,8 @@ var AE={
 ]},
 {phases:[
 {type:'trigger',icon:'⚡',label:'事件触发',detail:'点评管理: 美团收到1条3星差评"早餐品种少"',source:'美团点评'},
-{type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.6s',input:'评价文本 + 近30天早餐评价 + SOP标准',thinking:'近30天早餐相关评价12条，3条提到品种少。当前早餐品类28种，行业标准35+。建议真诚致歉+告知整改计划，并推送给餐饮Agent列为重点优化项。',confidence:93.6,decision:'回复差评 + 上报整改'},
-{type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'生成个性化差评回复',s:'done'},{name:'推送餐饮Agent列入整改',s:'done'},{name:'48h后电话回访安抚',s:'done'}]},
+{type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.6s',input:'评价文本 + 近30天早餐评价 + SOP标准',thinking:'近30天早餐相关评价12条，3条提到品种少。当前袋装早餐仅面包+鸡蛋+牛奶3类，建议真诚致歉+告知增加品种计划，并推送给供应链Agent列为重点优化项。',confidence:93.6,decision:'回复差评 + 上报整改'},
+{type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'生成个性化差评回复',s:'done'},{name:'推送供应链Agent扩充早餐品类',s:'done'},{name:'48h后电话回访安抚',s:'done'}]},
 {type:'result',icon:'✅',label:'完成',summary:'差评已回复，整改计划已推送',notify:'已通知餐饮和质检Agent'}
 ]}
 ],
@@ -649,8 +650,8 @@ var AE={
 ]},
 {phases:[
 {type:'trigger',icon:'⚡',label:'事件触发',detail:'供应商评估: 每月1号自动触发',source:'定时调度'},
-{type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'2.6s',input:'近30天订单记录 + 交付及时率 + 质检通过率 + 价格竞争力',thinking:'12家活跃供应商评分：A洗涤厂4.8(+0.2)、B备品¥优秀、C生鲜4.2(下滑)。C家近期2次延迟交付+1次质检不合格，建议降为备选，启用D家作主要生鲜供应商。',confidence:93.8,decision:'C家降级 + D家升级主供'},
-{type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'更新12家供应商评分',s:'done'},{name:'C家降级为备选',s:'done'},{name:'D家切换为生鲜主供',s:'done'}]},
+{type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'2.6s',input:'近30天订单记录 + 交付及时率 + 质检通过率 + 价格竞争力',thinking:'12家活跃供应商评分：A洗涤厂4.8(+0.2)、B备品¥优秀、C袋装食品4.2(下滑)。C家近期2次延迟交付+1次临期到货，建议降为备选，启用D家作主要袋装早餐供应商。',confidence:93.8,decision:'C家降级 + D家升级主供'},
+{type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'更新12家供应商评分',s:'done'},{name:'C家降级为备选',s:'done'},{name:'D家切换为袋装早餐主供',s:'done'}]},
 {type:'result',icon:'✅',label:'完成',summary:'12家供应商评估完成，2家调整',notify:'已通知餐饮和财务Agent'}
 ]}
 ],
