@@ -853,6 +853,247 @@ function renderNotifications() {
 }
 
 // ============================================================
+// AGENT LIVE EVENTS DATA
+// ============================================================
+const AGENT_EVENTS = {
+  'AGT-001': [ // 前台小星
+    { id:'E-001', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'PMS推送: 张先生到达前台，预订号R2856',source:'PMS系统'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.2s',input:'客人信息 + 预订详情 + 历史偏好档案',thinking:'识别为VIP金卡会员(历史入住12次)，偏好高楼层海景房，上次入住1208房评价满分。建议分配同楼层同朝向房间，触发VIP入住流程。',confidence:96.2,decision:'执行VIP入住流程 + 优先分配1208房'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'调用PMS: 分配1208房',status:'done'},{name:'生成电子房卡指令',status:'done'},{name:'通知客房管家Agent备房',status:'done'},{name:'同步宾客画像Agent更新偏好',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'VIP入住登记完成，耗时2.1s',notify:'已通知客房管家、宾客画像、收益管理师3个协作Agent'}
+    ]},
+    { id:'E-002', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'前台终端: 李女士请求退房，房号0815',source:'前台终端'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'0.8s',input:'房间状态 + 消费明细 + 会员等级',thinking:'普通会员，住2晚，minibar消费¥86，无损坏。房费已预授权覆盖，差额¥86需补收。检测到满意度调查未填写，建议退房时引导。',confidence:98.1,decision:'执行标准退房流程 + 引导满意度调查'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'结算房费+minibar ¥2,646',status:'done'},{name:'释放预授权差额',status:'done'},{name:'通知客房管家查房',status:'done'},{name:'推送满意度调查链接',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'退房结账完成，耗时3.5s',notify:'已通知客房管家查房、营销Agent跟进满意度'}
+    ]},
+    { id:'E-003', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'夜审定时任务: 02:00自动触发每日夜审',source:'定时调度'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'3.2s',input:'当日全部交易流水 + 房态快照 + 预授权记录',thinking:'核对218笔交易，总营收¥128,456。发现1笔预授权超48h未结算(0612房)，标记异常。其余账目平衡，差异¥0。',confidence:99.8,decision:'完成夜审 + 标记0612房预授权异常'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'生成夜审报告',status:'done'},{name:'冻结当日账目',status:'done'},{name:'标记0612预授权异常',status:'done'},{name:'推送夜审摘要给店长Agent',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'夜审完成，差异¥0，1笔异常已标记',notify:'已推送店长Agent和财务风控Agent'}
+    ]}
+  ],
+  'AGT-002': [ // 画像小慧
+    { id:'E-010', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'入住事件: 张先生(VIP金卡)入住1208房',source:'前台Agent联动'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'0.8s',input:'历史入住12次 + 消费偏好 + 评价记录 + 本次预订信息',thinking:'高价值客户画像更新：偏好高楼层海景(100%)、荞麦枕(最近3次)、22°C室温、依云矿泉水。本次携带儿童(新标签)，建议推送亲子套餐。',confidence:94.5,decision:'更新画像标签 + 触发个性化推荐'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'更新客户画像标签: +亲子出行',status:'done'},{name:'同步偏好到客房管家Agent',status:'done'},{name:'生成个性化欢迎推荐',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'画像更新完成，新增1个标签',notify:'已同步客房管家和营销Agent'}
+    ]},
+    { id:'E-011', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'退房评价: 李女士提交满意度4.2/5，提及"隔音一般"',source:'满意度系统'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.1s',input:'评价文本 + 历史评价 + 房间属性',thinking:'情感分析：整体正面但有隔音负面反馈。0815房靠近电梯，历史3条隔音投诉。建议标记该客户"安静偏好"，下次分配远离电梯房间。同时上报工程运维Agent排查隔音问题。',confidence:91.3,decision:'标记安静偏好 + 上报隔音问题'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'更新画像: +安静偏好',status:'done'},{name:'标记0815房隔音风险',status:'done'},{name:'通知工程运维Agent排查',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'负面反馈已处理，画像已更新',notify:'已通知工程运维Agent和质检Agent'}
+    ]}
+  ],
+  'AGT-003': [ // 客房小美
+    { id:'E-020', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'客房管家推送: 1208房VIP入住，需备房',source:'客房管家Agent'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'0.5s',input:'房间状态 + VIP偏好(荞麦枕/22°C/依云) + 清洁排班',thinking:'1208房已清洁完毕，需额外配置：荞麦枕替换、minibar补充依云x4、空调预设22°C、儿童拖鞋和牙刷(携带儿童)。当前3楼清洁员小王空闲，指派执行。',confidence:99.1,decision:'指派小王执行VIP备房 + 儿童用品'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'派单: 小王→1208房VIP备房',status:'done'},{name:'物品清单: 荞麦枕+依云x4+儿童套装',status:'done'},{name:'空调预设22°C',status:'done'},{name:'确认备房完成',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'VIP备房完成，耗时8分钟',notify:'已回报前台Agent备房就绪'}
+    ]},
+    { id:'E-021', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'IoT传感器: 0612房空调温度异常偏高28°C',source:'IoT网关'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'0.6s',input:'传感器数据 + 空调设定值 + 房间入住状态',thinking:'0612房设定24°C但实际28°C，偏差4°C超阈值。房间有客入住(赵女士)。可能原因：空调滤网堵塞或制冷剂不足。需立即派维修并提供临时解决方案。',confidence:95.7,decision:'创建维修工单 + 通知客人 + 送移动风扇'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'创建维修工单 #MT-2847',status:'done'},{name:'通知工程运维Agent派修',status:'done'},{name:'安排送移动风扇到0612',status:'done'},{name:'短信通知赵女士维修进度',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'空调异常已响应，维修工单已创建',notify:'已通知工程运维Agent，预计15分钟到达'}
+    ]}
+  ],
+  'AGT-004': [ // 餐饮小厨
+    { id:'E-030', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'餐厅POS: 早餐时段结束，需生成备料预测',source:'POS系统'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'2.1s',input:'今日早餐消耗 + 明日预订量 + 历史同期数据 + 天气预报',thinking:'今日早餐消耗：面包120份(超预期15%)、鸡蛋89份(正常)、牛奶67L(偏低)。明日预订87间(周末)，历史周末早餐率82%。天气晴好，预计户外用餐增加。建议面包备140份、增加果汁备量。',confidence:93.8,decision:'生成明日备料清单 + 调整面包和果汁备量'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'生成明日备料清单',status:'done'},{name:'推送采购需求给供应链Agent',status:'done'},{name:'调整厨房排班(增加早班)',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'明日备料预测完成，已推送采购',notify:'已通知供应链管控Agent和厨房主管'}
+    ]}
+  ],
+  'AGT-005': [ // 维修老赵
+    { id:'E-040', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'工单推送: #MT-2847 0612房空调异常',source:'客房Agent联动'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.5s',input:'工单详情 + 设备档案 + 维修历史 + 当前技工排班',thinking:'0612房空调型号大金VRV-III，上次维护45天前。历史记录：该楼层3台同型号空调近期均有制冷效率下降，疑似冷媒泄漏。技工张师傅当前空闲且有VRV认证。建议优先检查冷媒压力。',confidence:97.2,decision:'派张师傅检修 + 优先检查冷媒 + 标记楼层批量排查'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'派单: 张师傅→0612房',status:'done'},{name:'准备工具: 冷媒检测仪+补充罐',status:'done'},{name:'创建批量排查计划(6楼VRV)',status:'done'},{name:'更新设备档案预警标记',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'维修派单完成，预计15分钟到达',notify:'已通知客房Agent和前台Agent进度'}
+    ]}
+  ],
+  'AGT-006': [ // 营销小艾
+    { id:'E-050', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'CRM定时: 今日23位会员生日',source:'CRM系统'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.8s',input:'会员档案 + 消费频次 + 偏好标签 + 营销预算',thinking:'23位生日会员中：3位VIP(个性化礼遇)、8位活跃会员(生日券+祝福)、12位沉睡会员(唤醒券+祝福)。VIP张总在住，建议房内布置生日惊喜。预算控制在¥2,000内。',confidence:93.5,decision:'分层触达: VIP房内惊喜 + 活跃会员券 + 沉睡唤醒'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'VIP张总: 通知客房布置生日蛋糕',status:'done'},{name:'8位活跃会员: 推送生日专属8折券',status:'done'},{name:'12位沉睡会员: 推送¥100唤醒券+祝福',status:'done'},{name:'记录营销触达日志',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'23位会员生日触达完成',notify:'已通知客房Agent布置VIP惊喜'}
+    ]}
+  ],
+  'AGT-007': [ // 安保卫士
+    { id:'E-060', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'监控AI: 大堂区域检测到异常滞留人员',source:'视频监控AI'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'0.9s',input:'监控画面分析 + 人脸比对 + 行为轨迹',thinking:'大堂沙发区1人滞留超45分钟，非住客(人脸库未匹配)，无行李，多次观察前台方向。行为模式：低风险但需关注。建议安排保安礼貌询问，不建议直接驱离。',confidence:88.6,decision:'派保安礼貌询问 + 持续监控'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'通知当班保安前往大堂',status:'done'},{name:'标记监控画面存档',status:'done'},{name:'开启该区域增强监控模式',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'已派保安处理，确认为等候朋友的访客',notify:'已解除增强监控，记录访客登记'}
+    ]}
+  ],
+  'AGT-008': [ // 财务小算
+    { id:'E-070', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'对账系统: OTA平台(携程)T+1结算到账',source:'银行对账'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.4s',input:'银行到账明细 + 携程订单清单 + 佣金费率',thinking:'携程结算¥45,230，对应订单38笔。逐笔核对：37笔金额一致，1笔差异¥15(订单#CT-8821佣金计算偏差)。差异在容忍范围内(0.03%)，建议自动调账并标记。',confidence:99.5,decision:'自动对账 + 标记1笔差异 + 生成对账报告'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'完成38笔订单自动对账',status:'done'},{name:'标记#CT-8821差异¥15',status:'done'},{name:'生成携程T+1对账报告',status:'done'},{name:'更新应收账款台账',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'携程对账完成，差异¥15已标记',notify:'已推送财务主管审核'}
+    ]}
+  ],
+  'AGT-009': [ // 培训导师
+    { id:'E-080', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'HR系统: 新员工小刘入职第3天，触发培训跟踪',source:'HR系统'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.6s',input:'培训进度 + 考核成绩 + 岗位要求(前台)',thinking:'小刘前台岗位培训进度：理论课完成80%，实操课完成40%。昨日模拟入住考核78分(及格线80)，主要扣分项：房卡操作不熟练、会员等级识别慢。建议今日重点加强实操训练。',confidence:92.5,decision:'推送针对性练习 + 安排老带新实操'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'推送房卡操作视频教程',status:'done'},{name:'生成会员等级速查卡',status:'done'},{name:'安排与前台小星Agent模拟对练',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'培训计划已调整，安排今日实操加强',notify:'已通知前台主管和HR'}
+    ]}
+  ],
+  'AGT-010': [ // 质检精灵
+    { id:'E-090', phases:[
+      {type:'trigger',icon:'⚡',label:'事件触发',detail:'定时巡检: 14:00大堂服务质量巡检',source:'定时调度'},
+      {type:'reasoning',icon:'🧠',label:'模型推理',model:'Qwen-Max',latency:'1.6s',input:'大堂监控画面 + 前台对话记录 + 服务标准SOP',thinking:'抽检最近5笔前台对话：4笔符合SOP(问候语+身份确认+服务引导)，1笔缺少主动问候(14:02 #C-1245)。大堂环境：清洁度合格，绿植需浇水，背景音乐音量偏大。整体评分92/100。',confidence:96.4,decision:'生成巡检报告 + 标记2项改进'},
+      {type:'action',icon:'⚙️',label:'执行动作',steps:[{name:'生成大堂巡检报告(92分)',status:'done'},{name:'标记: 前台#C-1245缺少问候语',status:'done'},{name:'通知保洁: 绿植浇水+音乐调低',status:'done'},{name:'推送改进建议给培训Agent',status:'done'}]},
+      {type:'result',icon:'✅',label:'完成',summary:'大堂巡检完成，评分92/100',notify:'已通知培训Agent和前台主管'}
+    ]}
+  ]
+};
+
+// Map index.html agent IDs to app.js AGT IDs for cross-reference
+const AGENT_ID_MAP = {
+  'front-desk':'AGT-001','concierge':'AGT-002','housekeeper':'AGT-003',
+  'online-cs':'AGT-004','ota':'AGT-005','revenue':'AGT-006',
+  'gm':'AGT-007','mkt':'AGT-008','finance':'AGT-009',
+  'supply':'AGT-010','quality':'AGT-010','eng':'AGT-005'
+};
+
+// ============================================================
+// RENDER: LIVE EVENTS
+// ============================================================
+let liveTimer = null;
+let livePaused = false;
+let liveFilter = 'all';
+
+function renderLive(agentId) {
+  const panel = document.getElementById('livePanel');
+  if (!panel) return;
+  const events = AGENT_EVENTS[agentId] || AGENT_EVENTS['AGT-001'];
+  const agent = AGENTS[currentAgent] || AGENTS[0];
+
+  // Render status bar
+  const statusBar = document.getElementById('liveStatusBar');
+  if (statusBar) {
+    statusBar.innerHTML = `
+      <div class="live-status-item"><span class="live-model-badge">Qwen-Max</span></div>
+      <div class="live-status-item"><span class="live-dot running"></span>运行中</div>
+      <div class="live-status-item">今日处理 <strong>${agent.metrics?.conv || '342'}</strong></div>
+      <div class="live-status-item">成功率 <strong>${agent.metrics?.resolve || '98.7%'}</strong></div>
+    `;
+  }
+
+  // Render initial events
+  const feed = document.getElementById('liveFeed');
+  if (!feed) return;
+  feed.innerHTML = '';
+  events.forEach((evt, i) => {
+    setTimeout(() => renderEventCard(feed, evt, i === 0), i * 200);
+  });
+
+  // Start auto-play simulation
+  startLiveSimulation(agentId);
+}
+
+function renderEventCard(container, evt, prepend) {
+  const card = document.createElement('div');
+  card.className = 'live-event-card';
+  if (prepend && container.firstChild) {
+    card.style.animation = 'live-slide-in 0.4s ease';
+  }
+
+  const now = new Date();
+  const baseTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+
+  let html = '';
+  evt.phases.forEach((phase, pi) => {
+    const timeOffset = pi;
+    const phaseTime = evt.phases[0]?.time || baseTime;
+
+    if (phase.type === 'trigger') {
+      html += `<div class="live-phase live-phase-trigger">
+        <div class="live-phase-header"><span class="live-phase-icon trigger">${phase.icon}</span><span class="live-phase-label">${phase.label}</span><span class="live-phase-source">${phase.source}</span></div>
+        <div class="live-phase-body">${phase.detail}</div>
+      </div>`;
+    } else if (phase.type === 'reasoning') {
+      html += `<div class="live-phase live-phase-reasoning">
+        <div class="live-phase-header"><span class="live-phase-icon reasoning">${phase.icon}</span><span class="live-phase-label">${phase.label}</span><span class="live-model-tag">${phase.model}</span><span class="live-latency">${phase.latency}</span></div>
+        <div class="live-reasoning-box">
+          <div class="live-reasoning-row"><span class="live-reasoning-key">输入</span><span>${phase.input}</span></div>
+          <div class="live-reasoning-row"><span class="live-reasoning-key">推理</span><span>${phase.thinking}</span></div>
+          <div class="live-reasoning-row"><span class="live-reasoning-key">置信度</span><span class="live-confidence">${phase.confidence}%</span><div class="live-confidence-bar"><div class="live-confidence-fill" style="width:${phase.confidence}%"></div></div></div>
+          <div class="live-reasoning-row"><span class="live-reasoning-key">决策</span><span class="live-decision">${phase.decision}</span></div>
+        </div>
+      </div>`;
+    } else if (phase.type === 'action') {
+      html += `<div class="live-phase live-phase-action">
+        <div class="live-phase-header"><span class="live-phase-icon action">${phase.icon}</span><span class="live-phase-label">${phase.label}</span></div>
+        <div class="live-action-steps">${phase.steps.map((s,i) => `<div class="live-action-step ${s.status}"><span class="live-step-num">${i+1}</span><span class="live-step-name">${s.name}</span><span class="live-step-status">${s.status==='done'?'✅':'⏳'}</span></div>`).join('')}</div>
+      </div>`;
+    } else if (phase.type === 'result') {
+      html += `<div class="live-phase live-phase-result">
+        <div class="live-phase-header"><span class="live-phase-icon result">${phase.icon}</span><span class="live-phase-label">${phase.label}</span></div>
+        <div class="live-result-summary">${phase.summary}</div>
+        ${phase.notify ? `<div class="live-result-notify">📡 ${phase.notify}</div>` : ''}
+      </div>`;
+    }
+  });
+
+  card.innerHTML = html;
+  if (prepend && container.firstChild) {
+    container.insertBefore(card, container.firstChild);
+  } else {
+    container.appendChild(card);
+  }
+}
+
+function startLiveSimulation(agentId) {
+  if (liveTimer) clearInterval(liveTimer);
+  const events = AGENT_EVENTS[agentId] || AGENT_EVENTS['AGT-001'];
+  let eventIdx = 0;
+
+  liveTimer = setInterval(() => {
+    if (livePaused) return;
+    const feed = document.getElementById('liveFeed');
+    if (!feed) { clearInterval(liveTimer); return; }
+
+    eventIdx = (eventIdx + 1) % events.length;
+    // Clone event with fresh timestamp
+    const evt = JSON.parse(JSON.stringify(events[eventIdx]));
+    renderEventCard(feed, evt, true);
+
+    // Keep max 10 events visible
+    while (feed.children.length > 10) {
+      feed.removeChild(feed.lastChild);
+    }
+
+    feed.scrollTop = 0;
+  }, 12000);
+}
+
+function toggleLivePause() {
+  livePaused = !livePaused;
+  const btn = document.getElementById('livePauseBtn');
+  if (btn) btn.textContent = livePaused ? '▶ 继续' : '⏸ 暂停';
+}
+
+function clearLiveFeed() {
+  const feed = document.getElementById('liveFeed');
+  if (feed) feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)">等待新事件...</div>';
+}
+
+// ============================================================
 // INIT
 // ============================================================
 function init() {
